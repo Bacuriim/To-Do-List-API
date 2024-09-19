@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ToDoRepository extends JpaRepository<ToDoEntity, String> {
+public interface ToDoRepository extends JpaRepository<ToDoEntity, Long> {
 
     ToDoEntity findTaskByTitle(String title);
     ToDoEntity findTaskById(Long id);
     List<ToDoEntity> findAllTasksByFinished(boolean finished);
+    boolean existsByTitle(String title);
     void delete(ToDoEntity task);
 }

@@ -46,8 +46,12 @@ public class ToDoController {
     @PostMapping("/task")
     @ResponseBody
     @ApiOperation(value = "Create a new blog task")
-    public ToDoEntity createToDoEntity(@RequestBody ToDoEntity task) {
-        return toDoRepository.save(task);
+    public String createToDoEntity(@RequestBody ToDoEntity task) {
+        if (!toDoRepository.existsByTitle(task.getTitle())) {
+            toDoRepository.save(task);
+            return "Entity created";
+        }
+        return "This task title already exists!";
     }
 
     @DeleteMapping("/task/{taskId}")
@@ -57,6 +61,14 @@ public class ToDoController {
         ToDoEntity task = toDoService.getTaskById(taskId);
         toDoRepository.delete(task);
         return "Task Deleted!";
+    }
+
+    @DeleteMapping("/tasks")
+    @ResponseBody
+    @ApiOperation(value="Delete all tasks")
+    public String deleteAllToDoEntity() {
+        toDoRepository.deleteAll();
+        return "All Tasks Deleted!";
     }
 
     @PutMapping("/task")

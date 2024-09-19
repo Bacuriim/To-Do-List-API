@@ -13,7 +13,7 @@ public class ToDoService {
     private ToDoRepository toDoRepository;
 
     public ToDoEntity getTaskByTitle(String title) {
-        return toDoRepository.findTaskByTitle(title);
+        return toDoRepository.findTaskByTitle(title) != null ? toDoRepository.findTaskByTitle(title) : null;
     }
     public ToDoEntity getTaskById(Long id) {
         return toDoRepository.findTaskById(id);
