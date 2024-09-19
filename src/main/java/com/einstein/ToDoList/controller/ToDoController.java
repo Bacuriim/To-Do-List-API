@@ -58,9 +58,12 @@ public class ToDoController {
     @ResponseBody
     @ApiOperation(value="Delete a task by ID")
     public String deleteToDoEntity(@PathVariable(value = "taskId") Long taskId) {
-        ToDoEntity task = toDoService.getTaskById(taskId);
-        toDoRepository.delete(task);
-        return "Task Deleted!";
+        if (toDoRepository.existsById(taskId)) {
+            ToDoEntity task = toDoService.getTaskById(taskId);
+            toDoRepository.delete(task);
+            return "Task Deleted!";
+        }
+        return "Task doesn't have this id or not exist";
     }
 
     @DeleteMapping("/tasks")
@@ -75,7 +78,11 @@ public class ToDoController {
     @ResponseBody
     @ApiOperation(value="Update an existing task")
     public String updateToDoEntity(@RequestBody ToDoEntity updatedTask) {
-        toDoRepository.save(updatedTask);
-        return "Task updated";
+        if (toDoRepository.existsByTitle(updatedTask.getTitle()) &&
+                toDoRepository.existsById(updatedTask.getId())) {
+            toDoRepository.save(updatedTask);
+            return "Task updated";
+        }
+        return "This task doesn't exists";
     }
 }
